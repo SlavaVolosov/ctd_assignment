@@ -9,7 +9,7 @@ from io import BytesIO
 # Load environment variables
 load_dotenv()
 
-CHAT_GPT_MODEL = os.getenv('CHAT_GPT_MODEL')
+CHAT_GPT_MODEL = os.getenv('CHAT_GPT_MODEL') or 'gpt-4o-mini'
 if not CHAT_GPT_MODEL:
     raise ValueError("CHAT_GPT_MODEL not found in .env file. Please add your model to the .env file.") 
 
@@ -21,7 +21,7 @@ HF_API_KEY = os.getenv('HF_API_KEY')
 if not HF_API_KEY:
     raise ValueError("HF_API_KEY not found in .env file. Please add your API key to the .env file.") 
 
-FLUX_MODEL = os.getenv('FLUX_MODEL')
+FLUX_MODEL = os.getenv('FLUX_MODEL') or 'black-forest-labs/FLUX.1-schnell'
 if not FLUX_MODEL:
     raise ValueError("FLUX_MODEL not found in .env file. Please add your model to the .env file.") 
 
