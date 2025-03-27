@@ -62,7 +62,7 @@ def search():
         image = get_image(f"{city_data['city_name']} city at ${city_data['local_time']} time")
         formatted_data['image'] = image
 
-        granma_image = get_granma_image()
+        granma_image = get_granma_image(city_data['city_name'])
         formatted_data['granma'] = granma_image
 
         return jsonify(formatted_data)

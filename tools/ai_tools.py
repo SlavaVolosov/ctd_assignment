@@ -9,9 +9,21 @@ from io import BytesIO
 # Load environment variables
 load_dotenv()
 
+CHAT_GPT_MODEL = os.getenv('CHAT_GPT_MODEL')
+if not CHAT_GPT_MODEL:
+    raise ValueError("CHAT_GPT_MODEL not found in .env file. Please add your model to the .env file.") 
+
 CHAT_GPT_API_KEY = os.getenv('CHAT_GPT_API_KEY')
 if not CHAT_GPT_API_KEY:
     raise ValueError("CHAT_GPT_API_KEY not found in .env file. Please add your API key to the .env file.") 
+
+HF_API_KEY = os.getenv('HF_API_KEY')
+if not HF_API_KEY:
+    raise ValueError("HF_API_KEY not found in .env file. Please add your API key to the .env file.") 
+
+FLUX_MODEL = os.getenv('FLUX_MODEL')
+if not FLUX_MODEL:
+    raise ValueError("FLUX_MODEL not found in .env file. Please add your model to the .env file.") 
 
 client = OpenAI(api_key=CHAT_GPT_API_KEY)
 
@@ -28,7 +40,7 @@ def get_coordinates_from_request(query):
         }]
     try:
         completion = client.chat.completions.create(
-            model='gpt-4o-mini',
+            model=CHAT_GPT_MODEL,
             messages=messages
         )
         reply = completion.choices[0].message.content
@@ -58,19 +70,17 @@ def get_recommendations(current_weather, city_name):
         raise Exception(f"Error getting coordinates: {str(e)}")
 
 # City image at current time
+flux_client = InferenceClient(model=FLUX_MODEL, api_key=HF_API_KEY)
 def get_image(prompt):
-    model_sdxl = "black-forest-labs/FLUX.1-schnell"
-    client = InferenceClient(model_sdxl)
-    image_data = client.text_to_image(f"{prompt}. Don't hesitate to add details in the prompt to make the image look better, like 'high-res, photorealistic', etc.")
+    image_data = flux_client.text_to_image(f"{prompt}. Don't hesitate to add details in the prompt to make the image look better, like 'high-res, photorealistic', etc.")
     data = BytesIO()
     image_data.save(data, "JPEG")
     data64 = base64.b64encode(data.getvalue()).decode('utf-8')
     return f"data:image/jpeg;base64,{data64}"
 
-def get_granma_image():
-    model_sdxl = "black-forest-labs/FLUX.1-schnell"
-    client = InferenceClient(model_sdxl)
-    image_data = client.text_to_image(f"Create an image of a kind elderly granma-like lady, 100px")
+def get_granma_image(city):
+    # client = InferenceClient(model=FLUX_MODEL, api_key=HF_API_KEY)
+    image_data = flux_client.text_to_image(f"Create an image of a kind elderly granma-like lady from ${city}, 100px")
     data = BytesIO()
     image_data.save(data, "JPEG")
     data64 = base64.b64encode(data.getvalue()).decode('utf-8')
