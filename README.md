@@ -12,11 +12,11 @@ python -m venv venv
 2. Activate the virtual environment:
 - Windows:
 ```bash
-venv\Scripts\activate
+.venv\\Scripts\\activate
 ```
 - Unix/MacOS:
 ```bash
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 3. Install dependencies:
@@ -47,6 +47,7 @@ http://localhost:5000
 
 - Modern, responsive UI
 - Real-time API data retrieval
+- AI handling of requests
 - Error handling
 - Loading states
 - Clean and intuitive interface
